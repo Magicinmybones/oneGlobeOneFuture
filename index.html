@@ -111,8 +111,8 @@
       </div>
     </div>
 
-    <!-- left to win text (behind globe) -->
-    <div style="position:absolute; left:0; right:0; bottom:16px; text-align:center; font-size:12px; font-weight:500; color:#cfc9e0; z-index:2;">left to win!</div>
+    <!-- left to win text (just below the counter, above the globe) -->
+    <div style="position:absolute; left:0; right:0; bottom:26px; text-align:center; font-size:12px; font-weight:500; color:#f4f1fb; z-index:20;">left to win!</div>
   <div style="position: absolute; top: -19px; left: -19px; font-family: {{ titleFontFamily }}; font-weight: 900; font-size: {{ ghostSize }}px; line-height: 0.72; color: #16112b; opacity: 0.5; letter-spacing: -0.02em; text-transform: uppercase; pointer-events: none; user-select: none; height: 108px; width: 100px">ONE<br>GLOBE,<br>ONE<br>FUTURE</div></div>
   </div>
 
@@ -159,8 +159,8 @@
       </div>
     </div>
 
-    <!-- stacked cards -->
-    <div style="position:relative; margin:34px 16px 0; padding-right:48px; z-index:4; overflow:visible; transform:scale(0.95); transform-origin:top center;">
+    <!-- stacked cards — interactive deck -->
+    <div style="position:relative; margin:34px 16px 0; height:314px; z-index:4; overflow:visible; transform:scale(0.95); transform-origin:top center;">
       <!-- purple smoke nebula BEHIND the glass (SVG turbulence), blurred through the card -->
       <div class="smoke-wrap">
         <svg viewBox="0 0 800 800" preserveAspectRatio="xMidYMid slice">
@@ -174,23 +174,24 @@
         </svg>
       </div>
       <div class="core-glow"></div>
-      <!-- deck layers (fanned right, vertically centered) -->
-      <div class="stack-layer" style="position:absolute; left:48px; right:0; top:72px; bottom:72px; border-radius:16px; z-index:1;"></div>
-      <div class="stack-layer" style="position:absolute; left:24px; right:24px; top:34px; bottom:34px; border-radius:16px; z-index:2;"></div>
-      <!-- main card -->
-      <div class="stack-card" style="position:relative; z-index:3; border-radius:18px; padding:19px 20px 28px 18px;">
-        <div style="position:relative; z-index:1; font-family:{{ titleFontFamily }}; font-weight:900; font-size:19px; line-height:0.99; color:#7f59e5; text-transform:uppercase; letter-spacing:-0.02em;">ABOUT THE<br>COMPETITION</div>
-        <div style="position:relative; z-index:1; margin-top:16px; font-family:'Inter',sans-serif; font-weight:400; font-size:11px; line-height:1.75; letter-spacing:0.1px; color:#e9e4f6;">The competition is about making global money transfers accessible and engaging. By logging into SukuPay with your phone number, creating a team, receiving a complimentary dollar, and initiating the game worldwide, participants are challenged to transfer this dollar across different locations, showcasing the ease and simplicity of</div>
-      </div>
+      <!-- card deck — all three cards rendered, slot position driven by deckActive state -->
+      <sc-for list="{{ aboutCards }}" as="card">
+        <div class="stack-card" style="{{ card.style }}">
+          <div style="{{ card.textStyle }}">
+            <div style="font-family:{{ titleFontFamily }}; font-weight:900; font-size:19px; line-height:0.99; color:#7f59e5; text-transform:uppercase; letter-spacing:-0.02em; white-space:pre-line;">{{ card.title }}</div>
+            <div style="margin-top:16px; font-family:'Inter',sans-serif; font-weight:400; font-size:11px; line-height:1.75; letter-spacing:0.1px; color:#e9e4f6;">{{ card.body }}</div>
+          </div>
+        </div>
+      </sc-for>
     </div>
 
-    <!-- nav arrows -->
+    <!-- nav arrows + deck dots -->
     <div style="position:absolute; left:0; right:0; bottom:150px; display:flex; align-items:center; justify-content:space-between; padding:0 22px; z-index:5;">
-      <div style="width:58px; height:58px; border-radius:50%; background:#01010e; display:flex; align-items:center; justify-content:center;">
+      <div onclick="{{ prevCard }}" style-hover="background:#151129 !important" style-active="transform:scale(0.86)" style="width:58px; height:58px; border-radius:50%; background:#01010e; display:flex; align-items:center; justify-content:center; cursor:pointer; user-select:none; -webkit-tap-highlight-color:transparent; transition:transform .16s ease, background .2s ease;">
         <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#7c54e5" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"></path><path d="M12 5l-7 7 7 7"></path></svg>
       </div>
       <span style="width:5px; height:5px; border-radius:50%; background:#fff;"></span>
-      <div style="width:58px; height:58px; border-radius:50%; background:#01010e; display:flex; align-items:center; justify-content:center;">
+      <div onclick="{{ nextCard }}" style-hover="background:#151129 !important" style-active="transform:scale(0.86)" style="width:58px; height:58px; border-radius:50%; background:#01010e; display:flex; align-items:center; justify-content:center; cursor:pointer; user-select:none; -webkit-tap-highlight-color:transparent; transition:transform .16s ease, background .2s ease;">
         <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#7c54e5" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M12 5l7 7-7 7"></path></svg>
       </div>
     </div>
@@ -202,12 +203,121 @@
 
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;titleFont&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;Neighbor Black&quot;,&quot;options&quot;:[&quot;Neighbor Black&quot;,&quot;Dez Boulder Alter&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Typography&quot;},&quot;veilAlpha&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:0.1,&quot;min&quot;:0.02,&quot;max&quot;:0.2,&quot;step&quot;:0.02,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Hero card&quot;},&quot;globeSize&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:540,&quot;min&quot;:150,&quot;max&quot;:800,&quot;step&quot;:2,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Globe (screen 1)&quot;,&quot;unit&quot;:&quot;px&quot;},&quot;globeX&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:-8,&quot;min&quot;:-150,&quot;max&quot;:150,&quot;step&quot;:2,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Globe (screen 1)&quot;,&quot;unit&quot;:&quot;px&quot;},&quot;globeY&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:-90,&quot;min&quot;:-150,&quot;max&quot;:150,&quot;step&quot;:2,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Globe (screen 1)&quot;,&quot;unit&quot;:&quot;px&quot;},&quot;worldGlobeSize&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:90,&quot;min&quot;:30,&quot;max&quot;:200,&quot;step&quot;:2,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Globe (screen 2)&quot;,&quot;unit&quot;:&quot;px&quot;},&quot;worldGlobeX&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:0,&quot;min&quot;:-80,&quot;max&quot;:80,&quot;step&quot;:1,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Globe (screen 2)&quot;,&quot;unit&quot;:&quot;px&quot;},&quot;worldGlobeY&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:1,&quot;min&quot;:-80,&quot;max&quot;:80,&quot;step&quot;:1,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Globe (screen 2)&quot;,&quot;unit&quot;:&quot;px&quot;},&quot;ghostSize&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:68,&quot;min&quot;:30,&quot;max&quot;:120,&quot;step&quot;:2,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Ghost text (screen 1)&quot;,&quot;unit&quot;:&quot;px&quot;},&quot;ghostX&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:26,&quot;min&quot;:-100,&quot;max&quot;:150,&quot;step&quot;:1,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Ghost text (screen 1)&quot;,&quot;unit&quot;:&quot;px&quot;},&quot;ghostY&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:-27,&quot;min&quot;:-100,&quot;max&quot;:200,&quot;step&quot;:1,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Ghost text (screen 1)&quot;,&quot;unit&quot;:&quot;px&quot;}}">class Component extends DCLogic {
+<script type="text/x-dc" data-dc-script data-props="{&quot;titleFont&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;Neighbor Black&quot;,&quot;options&quot;:[&quot;Neighbor Black&quot;,&quot;Dez Boulder Alter&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Typography&quot;},&quot;veilAlpha&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:0.1,&quot;min&quot;:0.02,&quot;max&quot;:0.2,&quot;step&quot;:0.02,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Hero card&quot;},&quot;globeSize&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:540,&quot;min&quot;:150,&quot;max&quot;:800,&quot;step&quot;:2,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Globe (screen 1)&quot;,&quot;unit&quot;:&quot;px&quot;},&quot;globeX&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:-8,&quot;min&quot;:-150,&quot;max&quot;:150,&quot;step&quot;:2,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Globe (screen 1)&quot;,&quot;unit&quot;:&quot;px&quot;},&quot;globeY&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:-90,&quot;min&quot;:-150,&quot;max&quot;:150,&quot;step&quot;:2,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Globe (screen 1)&quot;,&quot;unit&quot;:&quot;px&quot;},&quot;worldGlobeSize&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:90,&quot;min&quot;:30,&quot;max&quot;:200,&quot;step&quot;:2,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Globe (screen 2)&quot;,&quot;unit&quot;:&quot;px&quot;},&quot;worldGlobeX&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:0,&quot;min&quot;:-80,&quot;max&quot;:80,&quot;step&quot;:1,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Globe (screen 2)&quot;,&quot;unit&quot;:&quot;px&quot;},&quot;worldGlobeY&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:1,&quot;min&quot;:-80,&quot;max&quot;:80,&quot;step&quot;:1,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Globe (screen 2)&quot;,&quot;unit&quot;:&quot;px&quot;},&quot;ghostSize&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:68,&quot;min&quot;:30,&quot;max&quot;:120,&quot;step&quot;:2,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Ghost text (screen 1)&quot;,&quot;unit&quot;:&quot;px&quot;},&quot;ghostX&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:26,&quot;min&quot;:-100,&quot;max&quot;:150,&quot;step&quot;:1,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Ghost text (screen 1)&quot;,&quot;unit&quot;:&quot;px&quot;},&quot;ghostY&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:-27,&quot;min&quot;:-100,&quot;max&quot;:200,&quot;step&quot;:1,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Ghost text (screen 1)&quot;,&quot;unit&quot;:&quot;px&quot;}}">// all cards share the same fixed slot height — shorter copy just leaves breathing room at the bottom
+const DECK_CARDS = [
+  {
+    title: 'ABOUT THE\nCOMPETITION',
+    body: 'The competition is about making global money transfers accessible and engaging. By logging into SukuPay with your phone number, creating a team, receiving a complimentary dollar, and initiating the game worldwide, participants are challenged to transfer this dollar across different locations, showcasing the ease and simplicity of'
+  },
+  {
+    title: 'HOW TO\nPLAY',
+    body: 'Every transfer counts. Pass your dollar to a friend in another country and watch it hop across the map in real time. The further your dollar travels and the more borders it crosses, the higher your team climbs on the global leaderboard, one hop at a time.'
+  },
+  {
+    title: 'WIN BIG\nPRIZES',
+    body: 'The team whose dollar crosses the most borders before the timer hits zero takes home the $30,000 grand prize. Weekly milestones unlock bonus rewards along the way, so keep your dollar moving — every single border it crosses brings your squad one hop closer to the big win.'
+  }
+];
+
+// deck slots: 0 = front (full text), 1 = middle, 2 = back — fanned down-right like the original static layers
+const DECK_SLOTS = [
+  { pos: 'left:0px; right:48px; top:0px; bottom:0px;', z: 3, bg: 'rgba(255,255,255,0.075)' },
+  { pos: 'left:24px; right:24px; top:34px; bottom:34px;', z: 2, bg: 'rgba(255,255,255,0.055)' },
+  { pos: 'left:48px; right:0px; top:72px; bottom:72px;', z: 1, bg: 'rgba(255,255,255,0.045)' }
+];
+const DECK_EASE = 'cubic-bezier(0.22, 1, 0.36, 1)';
+
+class Component extends DCLogic {
+  componentDidMount() {
+    // recover if a hot reload landed mid-animation and wiped the pending timers
+    const s = this.state;
+    if (s.deckAnimating || (s.deckLeaving ?? -1) !== -1 || (s.deckEnterBack ?? -1) !== -1 || (s.deckEnterFront ?? -1) !== -1) {
+      this.setState({ deckAnimating: false, deckLeaving: -1, deckEnterBack: -1, deckEnterFront: -1 });
+    }
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this._deckT1);
+    clearTimeout(this._deckT2);
+  }
+
+  _deck() {
+    const s = this.state;
+    return {
+      active: s.deckActive ?? 0,
+      leaving: s.deckLeaving ?? -1,
+      enterBack: s.deckEnterBack ?? -1,
+      enterFront: s.deckEnterFront ?? -1,
+      animating: !!s.deckAnimating
+    };
+  }
+
+  nextCard() {
+    const d = this._deck();
+    if (d.animating) return;
+    const from = d.active;
+    // front card flies out to the right while the two behind step forward…
+    this.setState({ deckAnimating: true, deckLeaving: from, deckActive: (from + 1) % 3 });
+    this._deckT1 = setTimeout(() => {
+      // …then re-materialises at the back of the deck and fades in
+      this.setState({ deckLeaving: -1, deckEnterBack: from });
+      this._deckT2 = setTimeout(() => this.setState({ deckEnterBack: -1, deckAnimating: false }), 60);
+    }, 480);
+  }
+
+  prevCard() {
+    const d = this._deck();
+    if (d.animating) return;
+    const to = (d.active + 2) % 3;
+    // back card sweeps in from the left to retake the front slot while the others step back
+    this.setState({ deckAnimating: true, deckActive: to, deckEnterFront: to });
+    this._deckT1 = setTimeout(() => this.setState({ deckEnterFront: -1 }), 60);
+    this._deckT2 = setTimeout(() => this.setState({ deckAnimating: false }), 640);
+  }
+
+  _cardStyle(i) {
+    const d = this._deck();
+    const base = 'position:absolute; border-radius:18px; overflow:hidden; padding:19px 20px 28px 18px; will-change:transform,opacity;';
+    if (i === d.leaving) {
+      return base + DECK_SLOTS[0].pos + 'z-index:4; background:' + DECK_SLOTS[0].bg +
+        '; transform:translateX(130%) rotate(10deg); opacity:0; transition:transform .5s cubic-bezier(0.55, 0, 0.75, 0.45), opacity .34s ease .12s;';
+    }
+    if (i === d.enterBack) {
+      return base + DECK_SLOTS[2].pos + 'z-index:1; background:' + DECK_SLOTS[2].bg +
+        '; transform:scale(0.9); opacity:0; transition:none;';
+    }
+    if (i === d.enterFront) {
+      return base + DECK_SLOTS[0].pos + 'z-index:4; background:' + DECK_SLOTS[0].bg +
+        '; transform:translateX(-130%) rotate(-10deg); opacity:0; transition:none;';
+    }
+    const p = (i - d.active + 3) % 3;
+    const s = DECK_SLOTS[p];
+    const move = ('left .55s E, right .55s E, top .55s E, bottom .55s E, transform .55s E, opacity .45s ease')
+      .split('E').join(DECK_EASE);
+    return base + s.pos + 'z-index:' + s.z + '; background:' + s.bg + '; transform:none; opacity:1; transition:' + move + ';';
+  }
+
+  _cardTextStyle(i) {
+    const d = this._deck();
+    const p = (i - d.active + 3) % 3;
+    const visible = p === 0 || i === d.leaving;
+    return 'position:relative; z-index:1; opacity:' + (visible ? 1 : 0) +
+      '; transition:opacity .4s ease ' + (visible ? '.16s' : '0s') + ';';
+  }
+
   renderVals() {
     const font = this.props.titleFont ?? 'Neighbor Black';
     const family = font === 'Dez Boulder Alter' ? 'Baloo 2' : font;
     return {
       titleFontFamily: `'${family}', 'Archivo Expanded', sans-serif`,
+      aboutCards: DECK_CARDS.map((c, i) => ({
+        title: c.title,
+        body: c.body,
+        style: this._cardStyle(i),
+        textStyle: this._cardTextStyle(i)
+      })),
+      prevCard: () => this.prevCard(),
+      nextCard: () => this.nextCard(),
       veilAlpha: this.props.veilAlpha ?? 0.10,
       globeSize: this.props.globeSize ?? 540,
       globeX: this.props.globeX ?? 0,
